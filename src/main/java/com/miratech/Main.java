@@ -16,5 +16,7 @@ public class Main {
         String greeting = say.sayHello("Roman");
 
         System.out.println(greeting);
+
+        context.registerShutdownHook();
     }
 }
