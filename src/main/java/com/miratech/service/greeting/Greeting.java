@@ -5,4 +5,6 @@ public interface Greeting {
 
     String greet();
 
+    String goodBye();
+
 }

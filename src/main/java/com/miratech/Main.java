@@ -3,19 +3,38 @@ package com.miratech;
 import com.miratech.configuration.ApplicationConfig;
 import com.miratech.service.DefaultSayService;
 import com.miratech.service.SayService;
-import org.springframework.context.ConfigurableApplicationContext;
+import com.miratech.service.history.DefaultHistoryService;
+import com.miratech.service.history.HistoryService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
 
-    public static void main(String[] args) {
+    private static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 
-        ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+
+    private static void initContext() {
+        context = new AnnotationConfigApplicationContext();
+        context.getEnvironment().setActiveProfiles("lazy");
+        context.register(ApplicationConfig.class);
+        context.refresh();
+
+    }
+
+    public static void main(String[] args) {
+        initContext();
 
         SayService say = context.getBean(DefaultSayService.class);
-        String greeting = say.sayHello("Roman");
+        HistoryService historyService = context.getBean(DefaultHistoryService.class);
 
-        System.out.println(greeting);
+
+        System.out.println(say.sayHello("Roman"));
+        System.out.println(say.sayGoodBye("Roman"));
+        System.out.println(say.sayHello("Roman"));
+        System.out.println(say.sayGoodBye("Roman"));
+        System.out.println(say.sayGoodBye("Roman"));
+
+
+        historyService.printHistory();
 
         context.registerShutdownHook();
     }
